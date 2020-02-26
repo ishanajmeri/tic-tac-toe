@@ -80,7 +80,10 @@ yarn watch
 The server application will be running on [http://localhost:3000], while the client application will be running on
 [http://localhost:8080]. The terminal will tell your the exact ports.
 
-
+## Functions used to make Game
+1. Formik Library
+2. Ant Design React UI library
+3. React-translate
 
 [our chat]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [mit]: LICENSE
