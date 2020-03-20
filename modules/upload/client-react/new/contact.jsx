@@ -10,7 +10,17 @@ class Games extends Component {
   };
 
   isWinner = data => {
-    const lines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+    // eslint-disable-next-line prettier/prettier
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (data[a] === data[b] && data[a] === data[c]) return data[a];
@@ -37,11 +47,16 @@ class Games extends Component {
   render() {
     const Td = ({ int, value }) => {
       return (
-        <td style={{ cursor: 'pointer', height: 48, width: 40 }} onClick={() => this.handleClick(int)}>
+        // eslint-disable-next-line prettier/prettier
+        <td
+          style={{ cursor: 'pointer', height: 48, width: 40 }}
+          onClick={() => this.handleClick(int)}
+        >
           {value}
         </td>
       );
     };
+
     const { data, element } = this.state;
     const winner = this.isWinner(data);
     let { tie } = this.state;
@@ -56,20 +71,20 @@ class Games extends Component {
     console.log(status, 'status');
     return (
       <React.Fragment>
-        <Row type="flex" justify="center">
+        <Row type="flex" justify="center" style={{ padding: '5px' }}>
           <h2>TIC TAC TOE</h2>
         </Row>
-        <Row type="flex" justify="center">
+        <Row type="flex" justify="center" style={{ padding: '5px' }}>
           <Col>
             <Button type="primary" onClick={this.handleRestart}>
               Restart
             </Button>
           </Col>
         </Row>
-        <Row type="flex" justify="center">
+        <Row type="flex" justify="center" style={{ padding: '5px' }}>
           <Col>
             <div>
-              <div>{status}</div>
+              <div style={{ padding: '5px' }}>{status}</div>
               <table className="table table-bordered">
                 <tbody>
                   <tr>
