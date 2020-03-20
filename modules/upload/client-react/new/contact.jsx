@@ -84,7 +84,7 @@ class Games extends Component {
         <Row type="flex" justify="center" style={{ padding: '5px' }}>
           <Col>
             <div>
-              <div style={{ padding: '5px' }}>{status}</div>
+              <div style={{}}>{status}</div>
               <table className="table table-bordered">
                 <tbody>
                   <tr>
