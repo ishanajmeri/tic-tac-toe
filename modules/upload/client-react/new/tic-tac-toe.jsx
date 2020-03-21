@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Row, Col } from 'antd';
+import { Button, Row, Col, Alert } from 'antd';
 import { PropTypes } from 'prop-types';
 
 class Game extends Component {
@@ -63,7 +63,7 @@ class Game extends Component {
     const { values } = this.props.location;
     let status = 'none';
     if (winner) {
-      console.log(values.player1, 'player1');
+      // console.log(values.player1, 'player1');
       if (winner === 'X') status = 'winner : ' + values.player1;
       if (winner === 'O') status = 'Winner : ' + values.player2;
     } else if (tie === 9) {
@@ -71,9 +71,10 @@ class Game extends Component {
     } else {
       status = (element ? values.player1 : values.player2) + "'s turn";
     }
+    console.log(status, 'yesssssssssssss');
     return (
       <React.Fragment>
-        <Row type="flex" justify="center" bordered>
+        <Row type="flex" justify="center">
           <h2>TIC TAC TOE</h2>
         </Row>
         <Row type="flex" justify="center">
@@ -83,32 +84,51 @@ class Game extends Component {
             </Button>
           </Col>
         </Row>
-        <Row type="flex" justify="center">
+        {(status === `${values.player1}'s turn` || status === `${values.player2}'s turn`) && (
+          <Row type="flex" justify="center">
+            <Col>
+              <div
+                style={{
+                  padding: '10px',
+                  alignSelf: 'center',
+                  fontSize: '24px'
+                }}
+              >
+                {status}
+              </div>
+            </Col>
+          </Row>
+        )}
+        <Row type="flex" justify="center" style={{ padding: '5px' }}>
           <Col>
-            <div>
-              <div>{status}</div>
-              <table className="table table-bordered">
-                <tbody>
-                  <tr>
-                    <Td int="0" value={data[0]} />
-                    <Td int="1" value={data[1]} />
-                    <Td int="2" value={data[2]} />
-                  </tr>
-                  <tr>
-                    <Td int="3" value={data[3]} />
-                    <Td int="4" value={data[4]} />
-                    <Td int="5" value={data[5]} />
-                  </tr>
-                  <tr>
-                    <Td int="6" value={data[6]} />
-                    <Td int="7" value={data[7]} />
-                    <Td int="8" value={data[8]} />
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <table className="table table-bordered">
+              <tbody>
+                <tr>
+                  <Td int="0" value={data[0]} />
+                  <Td int="1" value={data[1]} />
+                  <Td int="2" value={data[2]} />
+                </tr>
+                <tr>
+                  <Td int="3" value={data[3]} />
+                  <Td int="4" value={data[4]} />
+                  <Td int="5" value={data[5]} />
+                </tr>
+                <tr>
+                  <Td int="6" value={data[6]} />
+                  <Td int="7" value={data[7]} />
+                  <Td int="8" value={data[8]} />
+                </tr>
+              </tbody>
+            </table>
           </Col>
         </Row>
+        {(status === `winner : ${values.player1}` || status === `winner : ${values.player2}`) && (
+          <Row type="flex" justify="center" style={{ padding: '5px' }}>
+            <h2>
+              <Alert message={status} />
+            </h2>
+          </Row>
+        )}
       </React.Fragment>
     );
   }
