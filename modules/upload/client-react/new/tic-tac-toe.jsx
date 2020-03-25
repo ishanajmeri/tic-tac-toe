@@ -71,7 +71,6 @@ class Game extends Component {
     } else {
       status = (element ? values.player1 : values.player2) + "'s turn";
     }
-    console.log(status, 'yesssssssssssss');
     return (
       <React.Fragment>
         <Row type="flex" justify="center">
