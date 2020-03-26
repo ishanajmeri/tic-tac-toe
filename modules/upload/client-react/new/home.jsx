@@ -32,7 +32,6 @@ class App extends Component {
   render() {
     const { SubMenu } = Menu;
     const { values, handleSubmit, errors } = this.props;
-    console.log(values);
     return (
       <LayoutCenter>
         <h2 className="text-center">Name of Players </h2>
@@ -64,8 +63,8 @@ const Home = withFormik({
     };
   },
   handleSubmit(values, { props }) {
-    if (values.player0 !== ' ') props.history.replace({ pathname: '/game', values: values });
-    if (values.player1 !== ' ') props.history.replace({ pathname: '/new', values: values });
+    if (values.player0 !== '') props.history.push({ pathname: '/new', values: values });
+    if (values.player1 !== '') props.history.push({ pathname: '/game', values: values });
   },
   validate: values => validate(values, formsFormSchema)
 });

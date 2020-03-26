@@ -23,7 +23,7 @@ class Game extends Component {
     const { element } = this.state;
     let { tie } = this.state;
     const data = [...this.state.data];
-    if (data[int] === 'x' || data[int] === 'o') return;
+    if (data[int] === 'X' || data[int] === 'O') return;
     if (this.isWinner(data) || data[int]) {
       return;
     }
@@ -53,7 +53,7 @@ class Game extends Component {
       if (winner === 'X') status = 'winner : ' + values.player1;
       if (winner === 'O') status = 'Winner : ' + values.player2;
     } else if (tie === 9) {
-      status = 'its draw';
+      status = "It's draw";
     } else {
       status = (element ? values.player1 : values.player2) + "'s turn";
     }
