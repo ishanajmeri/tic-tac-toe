@@ -11,7 +11,6 @@ class New extends Component {
     aiPlayer: 'X',
     lines: [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
   };
-
   isWinner = data => {
     const { lines } = this.state;
     for (let i = 0; i < lines.length; i++) {
@@ -22,29 +21,106 @@ class New extends Component {
   };
 
   handleClick = int => {
-    const { huPlayer } = this.state;
+    const { huPlayer, aiPlayer } = this.state;
     const data = [...this.state.data];
     if (data[int] === 'X' || data[int] === 'O') return;
     if (this.isWinner(data) || data[int]) {
       return;
     }
     data[int] = huPlayer;
-    this.bestSport();
     this.setState({ data });
+    this.bestSport(data);
+    data[this.bestSport(data)] = aiPlayer;
+    // console.log('handleclick');
   };
 
-  emptyBox = () => {
+  bestSport = data => {
+    const player = this.state.aiPlayer;
+    // console.log('bestSport');
+    const inx = this.minimax(data, player).index;
+    // console.log(inx, 'minimax value');
+    return inx;
+  };
+
+  emptyBox() {
     const { data } = this.state;
-    return data.filter(event => event === null);
+    var available = [];
+    console.log(data, 'emptybox');
+    const iterator = data.keys();
+    for (var key of iterator) {
+      if (data[key] === null) {
+        available.push(key);
+      }
+    }
+    return available;
+  }
+
+  checkWinner = (data, player) => {
+    // console.log('checkWinner');
+    const { lines } = this.state;
+    let plays = data.reduce((a, e, i) => (e === player ? a.concat(i) : a), []);
+    let gameWon = null;
+    for (let [index, win] of lines.entries()) {
+      if (win.every(elem => plays.indexOf(elem) > -1)) {
+        gameWon = { index: index, player: player };
+        break;
+      }
+    }
+    return gameWon;
   };
 
-  bestSport = () => {
-    return this.minimax();
-  };
+  minimax = (data, player) => {
+    // console.log('minimax');
+    const { huPlayer, aiPlayer } = this.state;
+    // console.log(data, 'data');
+    var availableSpots = this.emptyBox();
 
-  minimax = () => {
-    var availableSpots = this.emptyBox() - 1;
-    console.log(availableSpots);
+    console.log(availableSpots, 'element');
+    if (this.checkWinner(data, huPlayer)) {
+      return { score: -10 };
+    } else if (this.checkWinner(data, aiPlayer)) {
+      return { score: 10 };
+    } else if (availableSpots.length === 0) {
+      return { score: 0 };
+    }
+    var moves = [];
+    for (var i = 0; i < availableSpots.length; i++) {
+      var move = {};
+      // console.log(data[availableSpots[i]]);
+      // move.index = data[availableSpots[i]];
+      // data[availableSpots[i]] = player;
+
+      // if (player === aiPlayer) {
+      //   var result = this.minimax(data, huPlayer);
+      //   move.score = result.score;
+      // } else {
+      //   var result = this.minimax(data, aiPlayer);
+      //   move.score = result.score;
+      // }
+      // data[availableSpots[i]] = move.index;
+      // moves.push(move);
+    }
+
+    var bestMove;
+    if (player === aiPlayer) {
+      var bestScore = -10000;
+      for (i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = move[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      bestScore = 10000;
+      for (i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+    return moves[bestMove];
+    // return 5;
   };
 
   handleRestart = () => {
@@ -54,6 +130,7 @@ class New extends Component {
   };
 
   render() {
+    const { data } = this.state;
     const Td = ({ int, value }) => {
       return (
         <td style={{ cursor: 'pointer', height: 48, width: 40 }} onClick={() => this.handleClick(int)}>
@@ -61,7 +138,6 @@ class New extends Component {
         </td>
       );
     };
-    const { data } = this.state;
     // const winner = this.isWinner(data);
     // let { tie } = this.state;
     // const { values } = this.props.location;
