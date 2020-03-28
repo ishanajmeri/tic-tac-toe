@@ -9,7 +9,8 @@ class New extends Component {
     tie: 0,
     huPlayer: 'O',
     aiPlayer: 'X',
-    lines: [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+    lines: [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]],
+    availableSpots: []
   };
   isWinner = data => {
     const { lines } = this.state;
@@ -22,6 +23,7 @@ class New extends Component {
 
   handleClick = int => {
     const { huPlayer, aiPlayer } = this.state;
+    var { availableSpots: availableSports } = this.state;
     const data = [...this.state.data];
     if (data[int] === 'X' || data[int] === 'O') return;
     if (this.isWinner(data) || data[int]) {
@@ -29,6 +31,13 @@ class New extends Component {
     }
     data[int] = huPlayer;
     this.setState({ data });
+    const iterator = data.keys();
+    for (var key of iterator) {
+      if (data[key] === null) {
+        availableSports.push(key);
+      }
+    }
+    this.setState({ availableSports });
     this.bestSport(data);
     data[this.bestSport(data)] = aiPlayer;
     // console.log('handleclick');
@@ -42,18 +51,18 @@ class New extends Component {
     return inx;
   };
 
-  emptyBox() {
-    const { data } = this.state;
-    var available = [];
-    console.log(data, 'emptybox');
-    const iterator = data.keys();
-    for (var key of iterator) {
-      if (data[key] === null) {
-        available.push(key);
-      }
-    }
-    return available;
-  }
+  // emptyBox() {
+  //   const { data } = this.state;
+  //   var available = [];
+  //   console.log(data, 'emptybox');
+  //   const iterator = data.keys();
+  //   for (var key of iterator) {
+  //     if (data[key] === null) {
+  //       available.push(key);
+  //     }
+  //   }
+  //   return available;
+  // }
 
   checkWinner = (data, player) => {
     // console.log('checkWinner');
@@ -73,9 +82,9 @@ class New extends Component {
     // console.log('minimax');
     const { huPlayer, aiPlayer } = this.state;
     // console.log(data, 'data');
-    var availableSpots = this.emptyBox();
+    var { availableSpots } = this.state;
 
-    console.log(availableSpots, 'element');
+    // console.log(availableSpots, 'element');
     if (this.checkWinner(data, huPlayer)) {
       return { score: -10 };
     } else if (this.checkWinner(data, aiPlayer)) {
@@ -86,7 +95,7 @@ class New extends Component {
     var moves = [];
     for (var i = 0; i < availableSpots.length; i++) {
       var move = {};
-      // console.log(data[availableSpots[i]]);
+      console.log(data[availableSpots[i]]);
       // move.index = data[availableSpots[i]];
       // data[availableSpots[i]] = player;
 
