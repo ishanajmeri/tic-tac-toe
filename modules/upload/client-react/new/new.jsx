@@ -40,29 +40,13 @@ class New extends Component {
     this.setState({ availableSports });
     this.bestSport(data);
     data[this.bestSport(data)] = aiPlayer;
-    // console.log('handleclick');
   };
 
   bestSport = data => {
-    const player = this.state.aiPlayer;
-    // console.log('bestSport');
-    const inx = this.minimax(data, player).index;
-    // console.log(inx, 'minimax value');
+    const { aiPlayer } = this.state;
+    const inx = this.minimax(data, aiPlayer).index;
     return inx;
   };
-
-  // emptyBox() {
-  //   const { data } = this.state;
-  //   var available = [];
-  //   console.log(data, 'emptybox');
-  //   const iterator = data.keys();
-  //   for (var key of iterator) {
-  //     if (data[key] === null) {
-  //       available.push(key);
-  //     }
-  //   }
-  //   return available;
-  // }
 
   checkWinner = (data, player) => {
     // console.log('checkWinner');
@@ -79,12 +63,9 @@ class New extends Component {
   };
 
   minimax = (data, player) => {
-    // console.log('minimax');
     const { huPlayer, aiPlayer } = this.state;
-    // console.log(data, 'data');
     var { availableSpots } = this.state;
 
-    // console.log(availableSpots, 'element');
     if (this.checkWinner(data, huPlayer)) {
       return { score: -10 };
     } else if (this.checkWinner(data, aiPlayer)) {
@@ -95,19 +76,17 @@ class New extends Component {
     var moves = [];
     for (var i = 0; i < availableSpots.length; i++) {
       var move = {};
-      console.log(data[availableSpots[i]]);
-      // move.index = data[availableSpots[i]];
-      // data[availableSpots[i]] = player;
-
-      // if (player === aiPlayer) {
-      //   var result = this.minimax(data, huPlayer);
-      //   move.score = result.score;
-      // } else {
-      //   var result = this.minimax(data, aiPlayer);
-      //   move.score = result.score;
-      // }
-      // data[availableSpots[i]] = move.index;
-      // moves.push(move);
+      move.index = availableSpots[i];
+      data[availableSpots[i]] = player;
+      if (player === aiPlayer) {
+        var result = this.minimax(data, huPlayer);
+        move.score = result.score;
+      } else {
+        result = this.minimax(data, aiPlayer);
+        move.score = result.score;
+      }
+      data[availableSpots[i]] = move.index;
+      moves.push(move);
     }
 
     var bestMove;
