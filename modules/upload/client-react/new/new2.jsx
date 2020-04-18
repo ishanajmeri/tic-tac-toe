@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Row, Col } from 'antd';
+import { Button, Row, Col, Alert } from 'antd';
 import { PropTypes } from 'prop-types';
 
 class New2 extends Component {
@@ -135,7 +135,7 @@ class New2 extends Component {
   handleRestart = () => {
     let data = [...this.state.origBoard];
     data = Array(9).fill(null);
-    this.setState({ data: data });
+    this.setState({ data: data, winner: '' });
   };
 
   render() {
@@ -165,21 +165,6 @@ class New2 extends Component {
             </Button>
           </Col>
         </Row>
-        {(winner === 'X' || winner === 'O' || winner === 'T') && (
-          <Row type="flex" justify="center">
-            <Col>
-              <div
-                style={{
-                  padding: '10px',
-                  alignSelf: 'center',
-                  fontSize: '24px'
-                }}
-              >
-                {status}
-              </div>
-            </Col>
-          </Row>
-        )}
         <Row type="flex" justify="center" style={{ padding: '5px' }}>
           <Col>
             <table className="table table-bordered">
@@ -203,6 +188,13 @@ class New2 extends Component {
             </table>
           </Col>
         </Row>
+        {(winner === 'X' || winner === 'O' || winner === 'T') && (
+          <Row type="flex" justify="center" style={{ padding: '5px' }}>
+            <h2>
+              <Alert message={status} />
+            </h2>
+          </Row>
+        )}
       </React.Fragment>
     );
   }
