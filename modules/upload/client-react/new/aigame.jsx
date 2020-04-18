@@ -1,58 +1,72 @@
 import React, { Component } from 'react';
-import { Button, Row, Col } from 'antd';
+import { Button, Row, Col, Alert } from 'antd';
 import { PropTypes } from 'prop-types';
 
-class New extends Component {
+class New2 extends Component {
   state = {
     origBoard: [],
-    element: true,
+    data: Array.from(Array(9).fill(null)),
     tie: 0,
+    winner: '',
     huPlayer: 'O',
     aiPlayer: 'X',
     lines: [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]],
     availSpots: []
   };
-
   UNSAFE_componentWillMount() {
     const origBoard = Array.from(Array(9).keys());
     this.setState({ origBoard });
   }
-
   handleClick = square => {
-    const { origBoard, huPlayer, aiPlayer } = this.state;
+    const { origBoard, huPlayer, aiPlayer, winner } = this.state;
+    if (winner === 'X' || winner === 'O' || winner === 'T') return;
     if (typeof origBoard[square] === 'number') {
       this.turn(square, huPlayer);
-      if (!this.checkWinner(origBoard, huPlayer)) {
+      if (!this.checkWinner(origBoard, huPlayer) && this.checkTie) {
         this.turn(this.bestSport(origBoard), aiPlayer);
       }
     }
   };
 
   turn = (squareId, player) => {
-    const { origBoard: data, origBoard } = this.state;
+    const { data, origBoard } = this.state;
+    var { tie } = this.state;
     if (squareId === undefined) return;
     data[squareId] = player;
     origBoard[squareId] = player;
     let gameWon = this.checkWinner(origBoard, player);
     if (gameWon) this.gameOver(gameWon);
-    this.setState({ data, origBoard });
+    this.setState({ data, origBoard, tie: tie + 1 });
   };
 
   checkWinner = (data, player) => {
     const { lines } = this.state;
     let plays = data.reduce((a, e, i) => (e === player ? a.concat(i) : a), []);
-    let gameWon = null;
+    let gameWon = '';
     for (let [index, win] of lines.entries()) {
       if (win.every(elem => plays.indexOf(elem) > -1)) {
         gameWon = { index: index, player: player };
         break;
       }
     }
+
     return gameWon;
   };
 
   gameOver = gameWon => {
-    console.log(gameWon, 'gameWon');
+    var { winner } = this.state;
+    console.log(gameWon.player);
+    if (gameWon.player === 'X') {
+      winner = 'X';
+    } else winner = 'O';
+    this.setState({ winner });
+  };
+
+  checkTie = () => {
+    const { tie } = this.state;
+    var { winner } = this.state;
+    if (tie === 5) winner = 'T';
+    this.setState({ winner });
   };
 
   bestSport = origBoard => {
@@ -65,14 +79,8 @@ class New extends Component {
   }
 
   minimax = (newBoard, player) => {
-    // console.log(newBoard, 'newBoard', player, 'player');
-
     const { huPlayer, aiPlayer } = this.state;
     var availSpots = this.emptySquares();
-
-    // console.log(availSpots, 'availableSpots');
-
-    // console.log(dataIndex, 'dataIndex');
 
     if (this.checkWinner(newBoard, huPlayer)) {
       return { score: -10 };
@@ -88,7 +96,6 @@ class New extends Component {
 
       move.index = newBoard[availSpots[i]];
       newBoard[availSpots[i]] = player;
-      // console.log(newBoard, 'newBoard');
 
       var result;
       if (player === aiPlayer) {
@@ -101,8 +108,6 @@ class New extends Component {
 
       newBoard[availSpots[i]] = move.index;
       moves.push(move);
-
-      // console.log(moves, 'after moves');
     }
 
     var bestMove;
@@ -124,19 +129,24 @@ class New extends Component {
       }
     }
 
-    // console.log(moves[bestMove], 'bestMove');
     return moves[bestMove];
-    // return 5;
   };
 
   handleRestart = () => {
     let data = [...this.state.origBoard];
     data = Array(9).fill(null);
-    this.setState({ data: data });
+    this.setState({ data: data, winner: '' });
   };
 
   render() {
-    const { data } = this.state;
+    const { data, winner, tie } = this.state;
+    const { values } = this.props.location;
+    console.log(tie);
+    var status = 'none';
+
+    if (winner === 'X') status = values.player0 + ',you lose.';
+    if (winner === 'O') status = values.player0 + ',you win.';
+    if (winner === 'T') status = "it's draw";
     const Td = ({ int, value }) => {
       return (
         <td style={{ cursor: 'pointer', height: 48, width: 40 }} onClick={() => this.handleClick(int)}>
@@ -144,9 +154,6 @@ class New extends Component {
         </td>
       );
     };
-    // const winner = this.isWinner(data);
-    // let { tie } = this.state;
-    // const { values } = this.props.location;
     return (
       <React.Fragment>
         <Row type="flex" justify="center">
@@ -182,14 +189,21 @@ class New extends Component {
             </table>
           </Col>
         </Row>
+        {(winner === 'X' || winner === 'O' || winner === 'T') && (
+          <Row type="flex" justify="center" style={{ padding: '5px' }}>
+            <h2>
+              <Alert message={status} />
+            </h2>
+          </Row>
+        )}
       </React.Fragment>
     );
   }
 }
 
-export default New;
+export default New2;
 
-New.propTypes = {
+New2.propTypes = {
   location: PropTypes.object,
   values: PropTypes.object,
   player1: PropTypes.string,

@@ -63,7 +63,7 @@ const Home = withFormik({
     };
   },
   handleSubmit(values, { props }) {
-    if (values.player0 !== '') props.history.push({ pathname: '/new2', values: values });
+    if (values.player0 !== '') props.history.push({ pathname: '/AI', values: values });
     if (values.player1 !== '') props.history.push({ pathname: '/game', values: values });
   },
   validate: values => validate(values, formsFormSchema)

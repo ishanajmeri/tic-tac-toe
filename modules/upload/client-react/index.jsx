@@ -9,9 +9,7 @@ import Upload from './containers/Upload';
 import resources from './locales';
 import Home from './new/home';
 import Game from './new/tic-tac-toe';
-import Games from './new/contact';
-import New from './new/new';
-import New2 from './new/new2';
+import AIGame from './new/aigame';
 import 'antd/dist/antd.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -27,9 +25,7 @@ export default new ClientModule({
     <Route exact path="/upload" component={Upload} />,
     <Route exact path="/home" component={Home} />,
     <Route exact path="/game" component={Game} />,
-    <Route exact path="/new" component={New} />,
-    <Route exact path="/contactme" component={Games} />,
-    <Route exact path="/new2" component={New2} />
+    <Route exact path="/AI" component={AIGame} />
   ],
   navItem: [
     <MenuItem key="/upload">
