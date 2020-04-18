@@ -141,7 +141,6 @@ class New2 extends Component {
   render() {
     const { data, winner } = this.state;
     const { values } = this.props.location;
-    console.log(winner, 'winner');
     var status = 'none';
 
     if (winner === 'X') status = values.player0 + ',you lose.';
@@ -166,7 +165,7 @@ class New2 extends Component {
             </Button>
           </Col>
         </Row>
-        {!winner === '' && (
+        {(winner === 'X' || winner === 'O' || winner === 'T') && (
           <Row type="flex" justify="center">
             <Col>
               <div
