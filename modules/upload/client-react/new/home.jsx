@@ -2,53 +2,84 @@ import React, { Component } from 'react';
 import { withFormik, Form } from 'formik';
 import { RenderField, LayoutCenter, Button } from '@gqlapp/look-client-react';
 import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
-import { minLength, validate } from '@gqlapp/validation-common-react';
 import { PropTypes } from 'prop-types';
-import { Menu } from 'antd';
+import { Radio, Card, Row } from 'antd';
 
-const formsFormSchema = {
-  player0: [minLength(4)],
-  player1: [minLength(4)],
-  player2: [minLength(4)]
-};
-
+function handleValidate(values) {
+  const errors = {};
+  console.log(values, 'values');
+  if (values.player1 && !values.player2) {
+    errors.player2 = 'Required';
+  }
+  if (values.player2 && !values.player1) {
+    errors.player1 = 'Required';
+  }
+  if (values.player0 && values.player1 && values.player2) {
+    errors.main = 'inValid';
+  }
+  if (!values.player1 && !values.player2 && !values.player0) {
+    errors.player0 = 'Required';
+  }
+  if (errors) return false;
+  else return true;
+}
 class App extends Component {
   state = {
-    openKeys: ['']
+    key: 1
   };
 
-  rootSubmenuKeys = ['sub1', 'sub2'];
-
-  onOpenChange = openKeys => {
-    const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
-    if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      this.setState({ openKeys });
-    } else {
-      this.setState({
-        openKeys: latestOpenKey ? [latestOpenKey] : []
-      });
-    }
+  onChange = e => {
+    this.setState({ key: e.target.value });
   };
   render() {
-    const { SubMenu } = Menu;
     const { values, handleSubmit, errors } = this.props;
+    console.log(errors);
     return (
       <LayoutCenter>
-        <h2 className="text-center">Name of Players </h2>
-        <Form onSubmit={handleSubmit}>
-          <Menu style={{ width: 256 }} mode="inline" openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}>
-            <SubMenu key="sub1" title={<span>With AI</span>}>
-              <Field name="player0" component={RenderField} type="text" value={values.player0} label="Player0" />
-            </SubMenu>
-            <SubMenu key="sub2" title={<span>2 players</span>}>
-              <Field name="player1" component={RenderField} type="text" value={values.player1} label="Player1" />
-              <Field name="player2" component={RenderField} type="text" value={values.player2} label="Player2" />
-            </SubMenu>
-          </Menu>
-          <Button color="primary" type="submit" disabled={errors.player0 && (errors.player1 || errors.player2)}>
-            Submit
-          </Button>
-        </Form>
+        <h1 className="text-center" style={{ fontSize: '50px' }}>
+          TIC-TAC-TOE
+        </h1>
+        <br />
+        <Row justify="space-around" align="middle">
+          <Card title="Name of Players" style={{ position: 'fixed', left: '40%', top: '25%' }}>
+            <Form onSubmit={handleSubmit}>
+              <Row>
+                <Radio.Group onChange={this.onChange} value={this.state.key}>
+                  <Radio value={1}>AI</Radio>
+                  <Radio value={2}>2 players</Radio>
+                </Radio.Group>
+              </Row>
+              <br />
+              {this.state.key === 1 && (
+                <Field name="player0" component={RenderField} type="text" value={values.player0} label="Player" />
+              )}
+              {this.state.key === 2 && (
+                <div>
+                  <Field
+                    name="player1"
+                    component={RenderField}
+                    type="text"
+                    value={values.player1}
+                    label="first Player "
+                  />
+                  <Field
+                    name="player2"
+                    component={RenderField}
+                    type="text"
+                    value={values.player2}
+                    label="second Player "
+                  />
+                </div>
+              )}
+              <br />
+              <Row type="flex" justify="center">
+                <Button color="primary" type="submit" disabled={true && handleValidate(values)}>
+                  Submit
+                </Button>
+              </Row>
+            </Form>
+          </Card>
+        </Row>
       </LayoutCenter>
     );
   }
@@ -66,7 +97,7 @@ const Home = withFormik({
     if (values.player0 !== '') props.history.push({ pathname: '/AI', values: values });
     if (values.player1 !== '') props.history.push({ pathname: '/game', values: values });
   },
-  validate: values => validate(values, formsFormSchema)
+  validate: values => handleValidate(values)
 });
 export default Home(App);
 
