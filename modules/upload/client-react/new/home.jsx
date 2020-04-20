@@ -20,9 +20,9 @@ function handleValidate(values) {
   if (!values.player1 && !values.player2 && !values.player0) {
     errors.player0 = 'Required';
   }
-  if (errors) return false;
-  else return true;
+  return errors;
 }
+
 class App extends Component {
   state = {
     key: 1
@@ -41,7 +41,7 @@ class App extends Component {
         </h1>
         <br />
         <Row justify="space-around" align="middle">
-          <Card title="Name of Players" style={{ position: 'fixed', left: '40%', top: '25%' }}>
+          <Card title="Name of Players" bordered={false} style={{ position: 'fixed', left: '40%', top: '25%' }}>
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Radio.Group onChange={this.onChange} value={this.state.key}>
@@ -73,7 +73,7 @@ class App extends Component {
               )}
               <br />
               <Row type="flex" justify="center">
-                <Button color="primary" type="submit" disabled={true && handleValidate(values)}>
+                <Button color="primary" type="submit">
                   Submit
                 </Button>
               </Row>

@@ -22,7 +22,7 @@ class New2 extends Component {
     if (winner === 'X' || winner === 'O' || winner === 'T') return;
     if (typeof origBoard[square] === 'number') {
       this.turn(square, huPlayer);
-      if (!this.checkWinner(origBoard, huPlayer) && this.checkTie) {
+      if (!this.checkWinner(origBoard, huPlayer) && this.checkTie()) {
         this.turn(this.bestSport(origBoard), aiPlayer);
       }
     }
@@ -65,6 +65,7 @@ class New2 extends Component {
   checkTie = () => {
     const { tie } = this.state;
     var { winner } = this.state;
+    console.log('object');
     if (tie === 5) winner = 'T';
     this.setState({ winner });
   };
@@ -141,7 +142,7 @@ class New2 extends Component {
   render() {
     const { data, winner, tie } = this.state;
     const { values } = this.props.location;
-    console.log(tie);
+    console.log(tie, 'tie', winner, 'winner');
     var status = 'none';
 
     if (winner === 'X') status = values.player0 + ',you lose.';
