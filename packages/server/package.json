@@ -33,12 +33,12 @@
       "git add"
     ]
   },
+  "bugs": {
+    "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/sysgears/apollo-universal-starter-kit"
-  },
-  "bugs": {
-    "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
   "keywords": [
