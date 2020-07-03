@@ -18,7 +18,7 @@ class Home extends Component {
     if (values.player0 !== undefined)
       this.props.history.push({ pathname: '/ai', values: values });
     if (values.player1 !== undefined)
-      this.props.history.push({ pathname: '/player', values: values });
+      this.props.history.push({ pathname: '/players', values: values });
   };
   render() {
     return (
@@ -27,7 +27,7 @@ class Home extends Component {
           <h1>TIC-TAC-TOE</h1>
         </Row>
         <Row justify="center">
-          <Card title="Name of Players">
+          <Card title="Name of Players" bordered={false}>
             <Row>
               <Radio.Group onChange={this.onChange} value={this.state.key}>
                 <Radio value={1}>AI</Radio>
