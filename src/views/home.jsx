@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Card, Form, Radio, Input } from 'antd';
+import { Row, Card, Form, Radio, Input, Button } from 'antd';
 class Home extends Component {
   state = {
     key: 1,
@@ -9,7 +9,16 @@ class Home extends Component {
     this.setState({ key: e.target.value });
   };
   handleValuesChange = (e) => {
-    console.log(e, 'value');
+    if (e.player0 !== '') {
+      this.setState({ required: !this.state.required });
+    }
+  };
+  handleFinish = (values) => {
+    // console.log(values.player0, values.player1);
+    if (values.player0 !== undefined)
+      this.props.history.push({ pathname: '/ai', values: values });
+    if (values.player1 !== undefined)
+      this.props.history.push({ pathname: '/player', values: values });
   };
   render() {
     return (
@@ -26,34 +35,54 @@ class Home extends Component {
               </Radio.Group>
             </Row>
             <br />
-            <Form onValuesChange={this.handleValuesChange}>
+            <Form
+              onValuesChange={this.handleValuesChange}
+              onFinish={this.handleFinish}
+            >
               {this.state.key === 1 && (
                 <Form.Item
-                  label="Name"
-                  name="name"
-                  rules={[{ required: !this.state.required }]}
+                  name="player0"
+                  rules={[
+                    {
+                      required: this.state.required,
+                      message: 'Please enter player name',
+                    },
+                  ]}
                 >
-                  <Input />
+                  <Input placeholder="Name" />
                 </Form.Item>
               )}
               {this.state.key === 2 && (
                 <>
                   <Form.Item
-                    label="Player1"
                     name="player1"
-                    rules={[{ required: this.state.required }]}
+                    rules={[
+                      {
+                        required: !this.state.required,
+                        message: 'Please enter player 1 name!',
+                      },
+                    ]}
                   >
-                    <Input />
+                    <Input placeholder="Player 1" />
                   </Form.Item>
                   <Form.Item
-                    label="Player2"
                     name="player2"
-                    rules={[{ required: this.state.required }]}
+                    rules={[
+                      {
+                        required: !this.state.required,
+                        message: 'Please enter player 2 name!',
+                      },
+                    ]}
                   >
-                    <Input />
+                    <Input placeholder="Player 2" />
                   </Form.Item>
                 </>
               )}
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
             </Form>
           </Card>
         </Row>
