@@ -149,13 +149,15 @@ class AiGame extends Component {
   };
 
   render() {
-    const { data, winner } = this.state;
+    const { data, winner, tie } = this.state;
     const { values } = this.props.location;
+    console.log(tie, 'tie', winner, 'winner');
+
     var status = 'none';
 
-    if (winner === 'X') status = values.player0 + ',you lose.';
-    if (winner === 'O') status = values.player0 + ',you win.';
-    if (winner === 'T') status = "it's draw";
+    if (winner === 'X') status = values.player0 + ',you lose!';
+    if (winner === 'O') status = values.player0 + ',you win!';
+    if (tie === 5) status = "it's draw!";
     const Td = ({ int, value }) => {
       return (
         <td
@@ -174,46 +176,61 @@ class AiGame extends Component {
     };
     return (
       <React.Fragment>
-        <Row justify="center">
-          <h2>TIC TAC TOE</h2>
-        </Row>
-        <Row justify="center">
-          <Col>
-            <Button type="primary" onClick={this.handleRestart}>
-              Restart
-            </Button>
-          </Col>
-        </Row>
-        <Row justify="center" style={{ padding: '5px' }}>
-          <Col>
-            <table style={{ border: '1px solid black' }}>
-              <tbody>
-                <tr style={{ border: '1px solid black' }}>
-                  <Td int="0" value={data[0]} />
-                  <Td int="1" value={data[1]} />
-                  <Td int="2" value={data[2]} />
-                </tr>
-                <tr style={{ border: '1px solid black' }}>
-                  <Td int="3" value={data[3]} />
-                  <Td int="4" value={data[4]} />
-                  <Td int="5" value={data[5]} />
-                </tr>
-                <tr style={{ border: '1px solid black' }}>
-                  <Td int="6" value={data[6]} />
-                  <Td int="7" value={data[7]} />
-                  <Td int="8" value={data[8]} />
-                </tr>
-              </tbody>
-            </table>
-          </Col>
-        </Row>
-        {(winner === 'X' || winner === 'O' || winner === 'T') && (
-          <Row type="flex" justify="center" style={{ padding: '5px' }}>
-            <h2>
-              <Alert message={status} />
-            </h2>
-          </Row>
-        )}
+        <div>
+          <div>
+            <Row justify="center" style={{ paddingTop: '10%' }}>
+              <h1
+                style={{
+                  fontFamily: "'Times New Roman', Times, serif",
+                  fontSize: '44px',
+                }}
+              >
+                TIC-TAC-TOE
+              </h1>
+            </Row>
+            <Row justify="center">
+              <Col>
+                <Button
+                  type="primary"
+                  onClick={this.handleRestart}
+                  style={{ width: '100%' }}
+                >
+                  Restart
+                </Button>
+              </Col>
+            </Row>
+            <Row justify="center" style={{ padding: '5px' }}>
+              <Col>
+                <table>
+                  <tbody>
+                    <tr style={{ border: '1px solid black' }}>
+                      <Td int="0" value={data[0]} />
+                      <Td int="1" value={data[1]} />
+                      <Td int="2" value={data[2]} />
+                    </tr>
+                    <tr style={{ border: '1px solid black' }}>
+                      <Td int="3" value={data[3]} />
+                      <Td int="4" value={data[4]} />
+                      <Td int="5" value={data[5]} />
+                    </tr>
+                    <tr style={{ border: '1px solid black' }}>
+                      <Td int="6" value={data[6]} />
+                      <Td int="7" value={data[7]} />
+                      <Td int="8" value={data[8]} />
+                    </tr>
+                  </tbody>
+                </table>
+              </Col>
+            </Row>
+            {(winner === 'X' || winner === 'O' || tie === 5) && (
+              <Row type="flex" justify="center" style={{ padding: '5px' }}>
+                <h2>
+                  <Alert message={status} />
+                </h2>
+              </Row>
+            )}
+          </div>
+        </div>
       </React.Fragment>
     );
   }
