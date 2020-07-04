@@ -14,7 +14,6 @@ class Home extends Component {
     }
   };
   handleFinish = (values) => {
-    // console.log(values.player0, values.player1);
     if (values.player0 !== undefined)
       this.props.history.push({ pathname: '/ai', values: values });
     if (values.player1 !== undefined)
@@ -22,70 +21,100 @@ class Home extends Component {
   };
   render() {
     return (
-      <div>
-        <Row justify="center">
-          <h1>TIC-TAC-TOE</h1>
-        </Row>
-        <Row justify="center">
-          <Card title="Name of Players" bordered={false}>
-            <Row>
-              <Radio.Group onChange={this.onChange} value={this.state.key}>
-                <Radio value={1}>AI</Radio>
-                <Radio value={2}>2 players</Radio>
-              </Radio.Group>
-            </Row>
-            <br />
-            <Form
-              onValuesChange={this.handleValuesChange}
-              onFinish={this.handleFinish}
+      <div style={{ overflow: 'hidden' }}>
+        <video
+          autoPlay
+          loop
+          style={{
+            position: 'absolute',
+            width: '100%',
+            left: '50%',
+            top: '50%',
+            height: '100%',
+            objectFit: 'revert',
+            transform: 'translate(-50%,-50%)',
+            zIndex: '-1',
+          }}
+        >
+          <source src="./dog.mp4" type="video/mp4" />
+        </video>
+        <div>
+          <Row justify="center" style={{ paddingTop: '10%' }}>
+            <h1
+              style={{
+                fontFamily: "'Times New Roman', Times, serif",
+                fontSize: '44px',
+                color: 'BurlyWood',
+              }}
             >
-              {this.state.key === 1 && (
-                <Form.Item
-                  name="player0"
-                  rules={[
-                    {
-                      required: this.state.required,
-                      message: 'Please enter player name',
-                    },
-                  ]}
-                >
-                  <Input placeholder="Name" />
+              TIC-TAC-TOE
+            </h1>
+          </Row>
+          <Row justify="center">
+            <Card
+              title="Name of Players"
+              bordered={false}
+              style={{ backgroundColor: 'transparent' }}
+            >
+              <Row>
+                <Radio.Group onChange={this.onChange} value={this.state.key}>
+                  <Radio value={1}>AI</Radio>
+                  <Radio value={2}>2 players</Radio>
+                </Radio.Group>
+              </Row>
+              <br />
+              <Form
+                onValuesChange={this.handleValuesChange}
+                onFinish={this.handleFinish}
+              >
+                {this.state.key === 1 && (
+                  <Form.Item
+                    name="player0"
+                    rules={[
+                      {
+                        required: this.state.required,
+                        message: 'Please enter player name',
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Name" />
+                  </Form.Item>
+                )}
+                {this.state.key === 2 && (
+                  <>
+                    <Form.Item
+                      name="player1"
+                      rules={[
+                        {
+                          required: !this.state.required,
+                          message: 'Please enter player 1 name!',
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Player 1" />
+                    </Form.Item>
+                    <Form.Item
+                      name="player2"
+                      rules={[
+                        {
+                          required: !this.state.required,
+                          message: 'Please enter player 2 name!',
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Player 2" />
+                    </Form.Item>
+                  </>
+                )}
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
                 </Form.Item>
-              )}
-              {this.state.key === 2 && (
-                <>
-                  <Form.Item
-                    name="player1"
-                    rules={[
-                      {
-                        required: !this.state.required,
-                        message: 'Please enter player 1 name!',
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Player 1" />
-                  </Form.Item>
-                  <Form.Item
-                    name="player2"
-                    rules={[
-                      {
-                        required: !this.state.required,
-                        message: 'Please enter player 2 name!',
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Player 2" />
-                  </Form.Item>
-                </>
-              )}
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </Card>
-        </Row>
+              </Form>
+            </Card>
+          </Row>
+        </div>
       </div>
     );
   }
