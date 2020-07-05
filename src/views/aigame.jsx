@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Button, Alert } from 'antd';
-
+import { Row, Col, Button } from 'antd';
 class AiGame extends Component {
   state = {
     origBoard: [],
@@ -143,21 +142,21 @@ class AiGame extends Component {
   };
 
   handleRestart = () => {
-    let data = [...this.state.origBoard];
-    data = Array(9).fill(null);
-    this.setState({ data: data, winner: '' });
+    let data = Array(9).fill(null);
+    let origBoard = Array.from(Array(9).keys());
+    this.setState({
+      origBoard,
+      tie: 0,
+      availSpots: [],
+      data,
+      winner: '',
+    });
   };
 
   render() {
     const { data, winner, tie } = this.state;
-    const { values } = this.props.location;
-    console.log(tie, 'tie', winner, 'winner');
+    // const { values } = this.props.location;
 
-    var status = 'none';
-
-    if (winner === 'X') status = values.player0 + ',you lose!';
-    if (winner === 'O') status = values.player0 + ',you win!';
-    if (tie === 5) status = "it's draw!";
     const Td = ({ int, value }) => {
       return (
         <td
@@ -176,9 +175,19 @@ class AiGame extends Component {
     };
     return (
       <React.Fragment>
-        <div>
+        <div
+          style={{
+            backgroundColor: '#DCDCDC',
+            backgroundImage: 'url(./il.jpg)',
+            height: '100vh',
+            backgroundRepeat: 'no-repeat',
+            backgroundPositionX: 'left',
+            backgroundPositionY: 'bottom',
+            backgroundSize: '30%',
+          }}
+        >
           <div>
-            <Row justify="center" style={{ paddingTop: '10%' }}>
+            <Row justify="center" style={{ paddingTop: '4%' }}>
               <h1
                 style={{
                   fontFamily: "'Times New Roman', Times, serif",
@@ -203,17 +212,17 @@ class AiGame extends Component {
               <Col>
                 <table>
                   <tbody>
-                    <tr style={{ border: '1px solid black' }}>
+                    <tr>
                       <Td int="0" value={data[0]} />
                       <Td int="1" value={data[1]} />
                       <Td int="2" value={data[2]} />
                     </tr>
-                    <tr style={{ border: '1px solid black' }}>
+                    <tr>
                       <Td int="3" value={data[3]} />
                       <Td int="4" value={data[4]} />
                       <Td int="5" value={data[5]} />
                     </tr>
-                    <tr style={{ border: '1px solid black' }}>
+                    <tr>
                       <Td int="6" value={data[6]} />
                       <Td int="7" value={data[7]} />
                       <Td int="8" value={data[8]} />
@@ -223,10 +232,15 @@ class AiGame extends Component {
               </Col>
             </Row>
             {(winner === 'X' || winner === 'O' || tie === 5) && (
-              <Row type="flex" justify="center" style={{ padding: '5px' }}>
-                <h2>
-                  <Alert message={status} />
-                </h2>
+              <Row type="flex" justify="center">
+                {winner === 'X' && <img src="original.gif" alt="" />}
+                {tie === 5 && (
+                  <img
+                    src="./draw.gif"
+                    alt=""
+                    style={{ position: 'absolute', height: '35%' }}
+                  />
+                )}
               </Row>
             )}
           </div>
